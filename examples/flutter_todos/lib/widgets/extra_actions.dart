@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todos/blocs/authentication/authentication_bloc.dart';
 import 'package:todos_app_core/todos_app_core.dart';
 import 'package:flutter_todos/blocs/todos/todos.dart';
 import 'package:flutter_todos/models/models.dart';
@@ -29,6 +30,8 @@ class ExtraActions extends StatelessWidget {
                 case ExtraAction.toggleAllComplete:
                   BlocProvider.of<TodosBloc>(context).add(ToggleAll());
                   break;
+                case ExtraAction.logout:
+                  BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLogoutRequested());
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[
@@ -48,6 +51,14 @@ class ExtraActions extends StatelessWidget {
                   ArchSampleLocalizations.of(context).clearCompleted,
                 ),
               ),
+              PopupMenuItem<ExtraAction>(
+                key: Key('logout'),
+                value: ExtraAction.logout,
+                child: Text(
+                  "Log out",
+                ),
+              ),
+
             ],
           );
         }
