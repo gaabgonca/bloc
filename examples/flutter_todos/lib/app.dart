@@ -2,6 +2,8 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todos/blocs/authentication/authentication_bloc.dart';
+import 'package:flutter_todos/blocs/todos/file_storage.dart';
+import 'package:flutter_todos/blocs/todos/repository.dart';
 import 'package:flutter_todos/screens/login_home_page.dart';
 import 'package:flutter_todos/screens/login_screen.dart';
 import 'package:flutter_todos/screens/splash_page.dart';
@@ -12,7 +14,6 @@ import 'package:flutter_todos/blocs/blocs.dart';
 import 'package:flutter_todos/models/models.dart';
 import 'package:flutter_todos/screens/screens.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:todos_repository_simple/todos_repository_simple.dart';
 
 import 'localization.dart';
 

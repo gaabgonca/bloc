@@ -48,6 +48,8 @@ class AuthenticationBloc
     AuthenticationStatusChanged event,
   ) async {
     switch (event.status) {
+      case AuthenticationStatus.authenticationFailure:
+        return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.unauthenticated:
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
