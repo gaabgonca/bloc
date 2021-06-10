@@ -7,6 +7,10 @@ import 'package:flutter_todos/localization.dart';
 import 'package:flutter_todos/models/models.dart';
 
 class HomeScreen extends StatelessWidget {
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => HomeScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TabBloc, AppTab>(
@@ -24,6 +28,7 @@ class HomeScreen extends StatelessWidget {
             key: ArchSampleKeys.addTodoFab,
             onPressed: () {
               Navigator.pushNamed(context, ArchSampleRoutes.addTodo);
+
             },
             child: Icon(Icons.add),
             tooltip: ArchSampleLocalizations.of(context).addTodo,
