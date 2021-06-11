@@ -32,7 +32,7 @@ class TodoEntity {
       "task": task,
       "note": note,
       "id": id,
-      "createdAt": createdAt
+      // "createdAt": createdAt
     };
   }
 

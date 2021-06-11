@@ -65,6 +65,33 @@ class WebClient {
 
   }
 
+  Future<SuccessAndTodoEntity> updateTodo(TodoEntity todo) async {
+    try{
+      //get token
+      String token = await getToken();
+      var res = await http.put(Uri.parse('$SERVER_ADDRESS/api/v1/todos/${todo.id}'),
+          headers: <String, String>{
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(todo.toJson())
+      );
+      if (res.statusCode == 200){
+        var payload = jsonDecode(res.body);
+        if (payload['success']==true){
+          final todo = TodoEntity.fromJson(payload['data']);
+          print(todo.toString());
+          return SuccessAndTodoEntity(true, todoEntity: todo);
+        }
+      }
+      return SuccessAndTodoEntity(false);}
+    catch (e){
+      print(e);
+      throw e;
+    }
+
+  }
+
   Future<String> getToken() async {
     try {
       String token = await storage.read(key: 'token');
