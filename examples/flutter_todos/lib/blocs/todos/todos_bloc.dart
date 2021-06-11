@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_todos/blocs/todos/repository.dart';
+import 'package:flutter_todos/blocs/todos/web_client.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_todos/blocs/todos/todos.dart';
 import 'package:flutter_todos/models/models.dart';
@@ -40,20 +41,29 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapTodosLoadedToState() async* {
     try {
       final todos = await this.todosRepository.loadTodos();
+      print(todos);
       yield TodosLoadSuccess(
         todos.map(Todo.fromEntity).toList(),
       );
-    } catch (_) {
+    } catch (e) {
+      throw e;
       yield TodosLoadFailure();
     }
   }
 
   Stream<TodosState> _mapTodoAddedToState(TodoAdded event) async* {
     if (state is TodosLoadSuccess) {
-      final List<Todo> updatedTodos =
-          List.from((state as TodosLoadSuccess).todos)..add(event.todo);
-      yield TodosLoadSuccess(updatedTodos);
-      _saveTodos(updatedTodos);
+      List<Todo> todosList = List.from((state as TodosLoadSuccess).todos);
+      SuccessAndTodoEntity postSuccess = await todosRepository.postTodo(event.todo);
+      if (postSuccess.success){
+        List<Todo> updatedTodos = todosList;
+        Todo newTodo = Todo.fromEntity(postSuccess.todoEntity);
+        updatedTodos.add(newTodo);
+        yield TodosLoadSuccess(updatedTodos);
+      }else {
+        yield TodosLoadFailure();
+      }
+      // _saveTodos(updatedTodos);
     }
   }
 

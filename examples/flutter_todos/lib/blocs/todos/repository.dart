@@ -5,8 +5,10 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:flutter_todos/models/models.dart';
+import 'package:flutter_todos/models/todo_entity.dart';
+import 'package:flutter_todos/todos%20repository/todos_repository.dart';
 import 'package:meta/meta.dart';
-import 'package:todos_repository_core/todos_repository_core.dart';
 import 'file_storage.dart';
 import 'web_client.dart';
 
@@ -34,6 +36,14 @@ class TodosRepositoryFlutter implements TodosRepository {
       fileStorage.saveTodos(todos);
 
       return todos;
+    }
+  }
+
+  Future<SuccessAndTodoEntity> postTodo(Todo todo) async {
+    try {
+      return await webClient.postTodo(todo.toEntity());
+    } catch(e){
+      throw e;
     }
   }
 

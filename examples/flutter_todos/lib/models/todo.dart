@@ -1,6 +1,6 @@
+import 'package:flutter_todos/models/todo_entity.dart';
 import 'package:todos_app_core/todos_app_core.dart';
 import 'package:equatable/equatable.dart';
-import 'package:todos_repository_core/todos_repository_core.dart';
 
 class Todo extends Equatable {
   final bool complete;
