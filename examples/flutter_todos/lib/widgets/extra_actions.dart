@@ -32,6 +32,8 @@ class ExtraActions extends StatelessWidget {
                   break;
                 case ExtraAction.logout:
                   BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLogoutRequested());
+                  // BlocProvider.of<TodosBloc>(context).add(TodosEmpty());
+                  break;
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuItem<ExtraAction>>[

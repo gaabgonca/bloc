@@ -8,6 +8,8 @@ abstract class TodosEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class TodosEmpty extends TodosEvent {}
+
 class TodosLoaded extends TodosEvent {}
 
 class TodoAdded extends TodosEvent {

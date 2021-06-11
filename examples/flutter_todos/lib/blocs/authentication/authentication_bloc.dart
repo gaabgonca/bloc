@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_todos/blocs/todos/todos_bloc.dart';
+import 'package:flutter_todos/blocs/todos/todos_event.dart';
 import 'package:user_repository/user_repository.dart';
 
 part 'authentication_event.dart';
@@ -10,9 +12,10 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({
+  AuthenticationBloc(this._todosBloc, {
      AuthenticationRepository authenticationRepository,
      UserRepository userRepository,
+    TodosBloc todosBloc,
   })   : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
@@ -20,7 +23,7 @@ class AuthenticationBloc
       (status) => add(AuthenticationStatusChanged(status)),
     );
   }
-
+  final TodosBloc _todosBloc;
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
   StreamSubscription<AuthenticationStatus>
@@ -33,7 +36,7 @@ class AuthenticationBloc
     if (event is AuthenticationStatusChanged) {
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
-      _authenticationRepository.logOut();
+      await _authenticationRepository.logOut();
     }
   }
 
@@ -51,9 +54,12 @@ class AuthenticationBloc
       case AuthenticationStatus.authenticationFailure:
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.unauthenticated:
+        _todosBloc.add(TodosEmpty());
         return const AuthenticationState.unauthenticated();
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
+        if (user!= null)
+        _todosBloc.add(TodosLoaded());
         return user != null
             ? AuthenticationState.authenticated(user)
             : const AuthenticationState.unauthenticated();

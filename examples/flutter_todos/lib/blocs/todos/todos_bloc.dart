@@ -24,6 +24,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       yield* _mapToggleAllToState();
     } else if (event is ClearCompleted) {
       yield* _mapClearCompletedToState();
+    } else if (event is TodosEmpty){
+      yield* _mapTodosEmptyToState();
+    }
+  }
+
+  Stream<TodosState> _mapTodosEmptyToState() async* {
+    try {
+      yield TodosLoadSuccess();
+    } catch (_) {
+      yield TodosLoadFailure();
     }
   }
 

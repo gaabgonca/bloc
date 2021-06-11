@@ -64,8 +64,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           username: state.username.value,
           password: state.password.value,
         );
-        if (success){
-        yield state.copyWith(status: FormzStatus.submissionSuccess);}
+        if (success) {
+          yield state.copyWith(status: FormzStatus.submissionSuccess);
+        }
+
         else {
           yield state.copyWith(status: FormzStatus.submissionFailure);
         }

@@ -42,7 +42,9 @@ class App extends StatelessWidget {
                     getApplicationDocumentsDirectory,
                   ),
                 ),
-              )..add(TodosLoaded());
+              )
+                // ..add(TodosLoaded())
+              ;
             }
           ),
           BlocProvider<TabBloc>(
@@ -59,7 +61,8 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider<AuthenticationBloc>(
-              create: (_) => AuthenticationBloc(
+              create: (context) => AuthenticationBloc(
+                BlocProvider.of<TodosBloc>(context),
                     authenticationRepository: authenticationRepository,
                     userRepository: userRepository,
                   ))
