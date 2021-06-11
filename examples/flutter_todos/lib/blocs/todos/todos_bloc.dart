@@ -43,7 +43,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final todos = await this.todosRepository.loadTodos();
       print(todos);
       yield TodosLoadSuccess(
-        todos.map(Todo.fromEntity).toList(),
+        todos.map(Todo.fromEntity).toList()..sort((a,b)=>a.createdAt.compareTo(b.createdAt)),
       );
     } catch (e) {
       throw e;

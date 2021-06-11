@@ -7,8 +7,9 @@ class TodoEntity {
   final String id;
   final String note;
   final String task;
+  final DateTime createdAt;
 
-  TodoEntity(this.task, this.id, this.note, this.complete);
+  TodoEntity(this.task, this.id, this.note, this.complete,this.createdAt);
 
   @override
   int get hashCode =>
@@ -22,7 +23,8 @@ class TodoEntity {
               complete == other.complete &&
               task == other.task &&
               note == other.note &&
-              id == other.id;
+              id == other.id &&
+              createdAt == other.createdAt;
 
   Map<String, Object> toJson() {
     return {
@@ -30,12 +32,13 @@ class TodoEntity {
       "task": task,
       "note": note,
       "id": id,
+      "createdAt": createdAt
     };
   }
 
   @override
   String toString() {
-    return 'TodoEntity{complete: $complete, task: $task, note: $note, id: $id}';
+    return 'TodoEntity{complete: $complete, task: $task, note: $note, id: $id, createdAt: $createdAt}';
   }
 
   static TodoEntity fromJson(Map<String, Object> json) {
@@ -44,6 +47,7 @@ class TodoEntity {
       json["_id"] as String,
       json["note"] as String,
       json["complete"] as bool,
+      DateTime.parse(json["createdAt"]) ,
     );
   }
 }
