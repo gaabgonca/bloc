@@ -17,19 +17,23 @@ class LoginForm extends StatelessWidget {
             );
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _UsernameInput(),
-            const Padding(padding: EdgeInsets.all(12)),
-            _PasswordInput(),
-            const Padding(padding: EdgeInsets.all(12)),
-            _LoginButton(),
-            const Padding(padding: EdgeInsets.all(12)),
-            _SignupButton(),
-          ],
+      child: SingleChildScrollView(
+        child: Align(
+          alignment: const Alignment(0, -1 / 3),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+
+            children: [
+              const Padding(padding: EdgeInsets.all(40),),
+              _UsernameInput(),
+              const Padding(padding: EdgeInsets.all(12)),
+              _PasswordInput(),
+              const Padding(padding: EdgeInsets.all(12)),
+              _LoginButton(),
+              const Padding(padding: EdgeInsets.all(10)),
+              _SignupButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -43,6 +47,7 @@ class _UsernameInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         return TextField(
+          keyboardType: TextInputType.emailAddress,
           key: const Key('loginForm_usernameInput_textField'),
           onChanged: (username) =>
               context.read<LoginBloc>().add(LoginUsernameChanged(username)),
@@ -87,7 +92,7 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
           key: const Key('loginForm_continue_raisedButton'),
-          child: const Text('Login'),
+          child: const Text('Log In'),
           onPressed: state.status.isValidated
               ? () {
             context.read<LoginBloc>().add(const LoginSubmitted());

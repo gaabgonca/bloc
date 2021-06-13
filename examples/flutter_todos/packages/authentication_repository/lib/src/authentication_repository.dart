@@ -32,7 +32,7 @@ class AuthenticationRepository {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(
-              <String, String>{"email": username, "password": password}));
+              <String, String>{"email": username.trim(), "password": password}));
       print(res.body);
       print(res.statusCode);
       if (res.statusCode == 200) {
@@ -65,7 +65,7 @@ class AuthenticationRepository {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(
-              <String, String>{"email": username, "password": password, "name": username,"role":"user"}));
+              <String, String>{"email": username.trim(), "password": password, "name": username,"role":"user"}));
       print(res.body);
       print(res.statusCode);
       if (res.statusCode == 200) {
