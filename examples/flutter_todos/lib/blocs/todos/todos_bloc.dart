@@ -85,12 +85,15 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapTodoDeletedToState(TodoDeleted event) async* {
     if (state is TodosLoadSuccess) {
-      final updatedTodos = (state as TodosLoadSuccess)
-          .todos
-          .where((todo) => todo.id != event.todo.id)
-          .toList();
-      yield TodosLoadSuccess(updatedTodos);
-      _saveTodos(updatedTodos);
+      List<Todo> todosList = List.from((state as TodosLoadSuccess).todos);
+      SuccessAndTodoEntity deleteSuccess = await todosRepository.deleteTodo(event.todo);
+      if (deleteSuccess.success){
+        List<Todo> updatedTodos = todosList..removeWhere((todo) => todo.id == event.todo.id);
+        updatedTodos.sort((a,b)=> a.createdAt.compareTo(b.createdAt));
+        yield TodosLoadSuccess(updatedTodos);
+      }else {
+        yield TodosLoadFailure();
+      }
     }
   }
 

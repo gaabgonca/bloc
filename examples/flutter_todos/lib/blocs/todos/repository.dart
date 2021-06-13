@@ -55,6 +55,13 @@ class TodosRepositoryFlutter implements TodosRepository {
     }
   }
 
+  Future<SuccessAndTodoEntity> deleteTodo(Todo todo) async {
+    try {return await webClient.deleteTodo(todo.toEntity());}
+    catch (e){
+      throw e;
+    }
+  }
+
   // Persists todos to local disk and the web
   @override
   Future saveTodos(List<TodoEntity> todos) {

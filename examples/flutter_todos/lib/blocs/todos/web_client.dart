@@ -92,6 +92,29 @@ class WebClient {
 
   }
 
+  Future<SuccessAndTodoEntity> deleteTodo(TodoEntity entity) async {
+    try{
+      //get token
+      String token = await getToken();
+      var res = await http.delete(Uri.parse('$SERVER_ADDRESS/api/v1/todos/${entity.id}'),
+          headers: <String, String>{
+            'Authorization': 'Bearer $token',
+          },
+      );
+      if (res.statusCode == 200){
+        var payload = jsonDecode(res.body);
+        if (payload['success']==true){
+          return SuccessAndTodoEntity(true);
+        }
+      }
+      return SuccessAndTodoEntity(false);}
+    catch (e){
+      print(e);
+      throw e;
+    }
+
+  }
+
   Future<String> getToken() async {
     try {
       String token = await storage.read(key: 'token');
@@ -145,6 +168,8 @@ class WebClient {
   Future<bool> postTodos(List<TodoEntity> todos) async {
     return Future.value(true);
   }
+
+
 
 
 }
