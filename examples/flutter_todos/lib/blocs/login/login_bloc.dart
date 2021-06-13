@@ -28,6 +28,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield _mapPasswordChangedToState(event, state);
     } else if (event is LoginSubmitted) {
       yield* _mapLoginSubmittedToState(event, state);
+    } else if (event is SignupSubmitted) {
+      yield* _mapSignupSubmittedToState(event, state);
     }
   }
 
@@ -61,6 +63,30 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
         bool success = await _authenticationRepository.logIn(
+          username: state.username.value,
+          password: state.password.value,
+        );
+        if (success) {
+          yield state.copyWith(status: FormzStatus.submissionSuccess);
+        }
+
+        else {
+          yield state.copyWith(status: FormzStatus.submissionFailure);
+        }
+      } on Exception catch (_) {
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
+    }
+  }
+
+  Stream<LoginState> _mapSignupSubmittedToState(
+      SignupSubmitted event,
+      LoginState state,
+      ) async* {
+    if (state.status.isValidated) {
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      try {
+        bool success = await _authenticationRepository.signUp(
           username: state.username.value,
           password: state.password.value,
         );

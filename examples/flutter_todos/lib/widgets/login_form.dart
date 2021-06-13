@@ -27,6 +27,8 @@ class LoginForm extends StatelessWidget {
             _PasswordInput(),
             const Padding(padding: EdgeInsets.all(12)),
             _LoginButton(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _SignupButton(),
           ],
         ),
       ),
@@ -45,8 +47,8 @@ class _UsernameInput extends StatelessWidget {
           onChanged: (username) =>
               context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
-            labelText: 'username',
-            errorText: state.username.invalid ? 'invalid username' : null,
+            labelText: 'email',
+            errorText: state.username.invalid ? 'invalid email' : null,
           ),
         );
       },
@@ -89,6 +91,28 @@ class _LoginButton extends StatelessWidget {
           onPressed: state.status.isValidated
               ? () {
             context.read<LoginBloc>().add(const LoginSubmitted());
+          }
+              : null,
+        );
+      },
+    );
+  }
+}
+
+class _SignupButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return state.status.isSubmissionInProgress
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+          key: const Key('loginForm_continue_raisedButton_signUp'),
+          child: const Text('Sign Up'),
+          onPressed: state.status.isValidated
+              ? () {
+            context.read<LoginBloc>().add(const SignupSubmitted());
           }
               : null,
         );

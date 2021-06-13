@@ -55,6 +55,40 @@ class AuthenticationRepository {
     return false;
   }
 
+  Future<bool> signUp({
+    required String username,
+    required String password,
+  }) async {
+    try {
+      var res = await http.post(Uri.parse('$SERVER_ADDRESS/api/v1/auth/register'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(
+              <String, String>{"email": username, "password": password, "name": username,"role":"user"}));
+      print(res.body);
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        var payload = jsonDecode(res.body);
+        if (payload['success'] == true) {
+          //Store the token
+          await storage.deleteAll();
+          await storage.write(key: 'token', value: payload['token']);
+          _controller.add(AuthenticationStatus.authenticated);
+          return true;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      _controller.addError(e);
+      _controller.add(AuthenticationStatus.unauthenticated);
+    }
+    return false;
+  }
+
+
   void logOut() async {
     try {
       String token = await getToken();
@@ -84,4 +118,6 @@ class AuthenticationRepository {
   }
 
   void dispose() => _controller.close();
+
+
 }
